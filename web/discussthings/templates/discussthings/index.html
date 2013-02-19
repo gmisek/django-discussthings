@@ -1,0 +1,9 @@
+{% if thing_list %}
+        <ul>
+            {% for thing in thing_list %}
+            <li><a href="/things/{{ thing.id }}/">{{ thing.name }}</a></li>
+            {% endfor %}
+        </ul>
+{% else %}
+        <p>No things exist right now. Click <a href="/things/thingify/">here</a> to get started.</p>
+{% endif %}
