@@ -5,5 +5,5 @@ local_settings.py
 .idea/*
 web/web/settings.py
 settings.py
-web/thing_pictures/*
+web/discussthings/static/thing_pictures/*
 *~

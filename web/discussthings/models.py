@@ -6,8 +6,7 @@ import time
 
 class Thing(models.Model):
     name = models.CharField(max_length=100)
-    image = models.ImageField(upload_to="thing_pictures/", null=True)
-
+    image = models.ImageField(upload_to="discussthings/static/thing_pictures/", null=True)
 
     def __unicode__(self):
         return self.name

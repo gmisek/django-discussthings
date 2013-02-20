@@ -1,0 +1,15 @@
+<h1>
+    {{ thing.name }}
+</h1>
+
+<div>
+    <img src="/things/{{ thing.image.url }}" style="height: 256px; width: 256px;" />
+</div>
+
+<div>
+    <ul>
+    {% for topic in thing.topic_set.all %}
+        <li>{{ topic.body }}</li>
+    {% endfor %}
+    </ul>
+</div>

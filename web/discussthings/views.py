@@ -1,20 +1,21 @@
 # Create your views here.
-from django.http import HttpResponse
-from django.template import Context, loader
+from django.http import HttpResponse, Http404
+from django.template import Context
+from django.shortcuts import render, get_object_or_404
 from models import *
 
 
 def index(request):
     thing_list = Thing.objects.order_by('name')
-    template = loader.get_template('discussthings/index.html')
     context = Context({
         'thing_list': thing_list,
     })
-    return HttpResponse(template.render(context))
+    return render(request, 'discussthings/index.html', context)
 
 
 def thing(request, thing_id):
-    return HttpResponse('Thing page - id: %s' % thing_id)
+    thing = get_object_or_404(Thing, pk=thing_id)
+    return render(request, 'discussthings/thing.html', {'thing': thing})
 
 
 def thingifier(request, thing_id):
