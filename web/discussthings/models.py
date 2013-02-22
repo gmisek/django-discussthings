@@ -1,8 +1,6 @@
 from django.db import models
+from django.forms import ModelForm
 import time
-
-# Create your models here.
-
 
 class Thing(models.Model):
     name = models.CharField(max_length=100)
@@ -11,6 +9,9 @@ class Thing(models.Model):
     def __unicode__(self):
         return self.name
 
+class ThingForm(ModelForm):
+    class Meta:
+        model = Thing
 
 class Topic(models.Model):
     author = models.CharField(max_length=100)
