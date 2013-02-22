@@ -7,7 +7,7 @@ urlpatterns = patterns('',
                        url(r'^$', views.index, name='index'),
                        # ex: /things/3/
                        url(r'^(?P<thing_id>\d+)/$', views.thing, name='thing'),
-                       url(r'^thingify/(?P<thing_id>\d+)/$', views.thingifier, name='thingifier'),
+                       url(r'^thingify/$', views.thingifier, name='thingifier'),
                        url(r'^(?P<thing_id>\d+)/talk/$', views.talk, name='talk'),
                        url(r'^(?P<thing_id>\d+)/reply/(?P<topic_id>\d+)/$', views.reply, name='reply'),
                        url(r'^discussthings/static/thing_pictures/(?P<path>.*)$', 'django.views.static.serve', {'document_root':'discussthings/static/thing_pictures'})
