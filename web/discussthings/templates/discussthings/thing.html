@@ -1,3 +1,53 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(function()
+    {
+
+    });
+
+    var ajaxSaveTopic = function()
+    {
+        $.ajax({
+                type: 'POST',
+                url: '/things/{{ thing.id }}/talk/',
+                data: {'author': $('#txtAuthor').val(), 'topic': $('#txtBody').val() },
+                dataType: 'json',
+                success: function(data) { alert('asdf'); },
+                error: function(jqXHR, status, error) { console.log(error); },
+                complete: function() { alert('topic save complete'); }
+        });
+    };
+
+    var ajaxSaveReply = function(respButton, topicId)
+    {
+        var author = $(respButton).siblings().children('#txtRespAuthor').val();
+        var body = $(respButton).siblings().children('#txtRespBody').val();
+        $.ajax({
+            type: 'POST',
+            url: '/things/{{ thing.id }}/' + topicId + '/reply/',
+            data: {'author': author, 'body': body },
+            dataType: 'json',
+            success: function(data) { console.log('data'); },
+            error: function(jXHR, status, error) { console.log(error); },
+            complete: function() { alert('reply save complete'); }
+        })
+    }
+
+
+    var openReply = function(replyspan)
+    {
+        var topicId = replyspan.getAttribute('data-topicid');
+        var form = '<div style="clear:both"><label for="txtRespAuthor">Name: <input type="text" id="txtRespAuthor" /></label><br/>'
+                 + '<label for="txtRespBody">Body: <input type="text" id="txtRespBody" /></label><br/>'
+                 + '<input type="submit" onclick="ajaxSaveReply(this, ' + topicId + ')" />'
+                 + '</div>'
+
+        $(form).insertAfter(replyspan);
+        event.preventDefault();
+    }
+</script>
+
 <h1>
     {{ thing.name }}
 </h1>
@@ -12,9 +62,23 @@
 <div>
     <ul>
     {% for topic in thing.topic_set.all %}
-        <li>{{ topic.body }}</li>
+        <li>{{ topic.author }} says: {{ topic.body }}<br/>
+            <a href="#" class="reply" onclick="openReply(this)" data-topicid="{{ topic.id}} ">Reply</a>
+           <ul style="margin-right: 15px;">
+               {% for resp in topic.response_set.all %}
+               <li>{{ resp.author }} replies: {{ resp.body }}<br/>
+               </li>
+               {% endfor %}
+           </ul>
+        </li>
     {% endfor %}
     </ul>
+</div>
+
+<div>
+    <label for="txtAuthor">Name: <input type="text" id="txtAuthor" /></label><br/>
+    <label for="txtBody">Body: <input type="text" id="txtBody" /></label><br/>
+    <input type="submit" onclick="ajaxSaveTopic()" />
 </div>
 
 <div>

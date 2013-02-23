@@ -3,6 +3,8 @@ from django.http import HttpResponse, Http404
 from django.template import Context, RequestContext
 from django.shortcuts import render, get_object_or_404, render_to_response, HttpResponseRedirect
 from models import *
+import json
+from django.views.decorators.csrf import csrf_exempt
 
 
 def index(request):
@@ -31,10 +33,22 @@ def thingifier(request):
         context_instance = RequestContext(request)
     )
 
-
+@csrf_exempt
 def talk(request, thing_id):
-    return HttpResponse('The topic adding thing - id:%s' % thing_id)
+    if not request.POST:
+        return
+    topic = request.POST.get('topic')
+    author = request.POST.get('author')
+    thing = Thing.objects.get(pk=thing_id)
+    topic = Topic.create(author=author, body=topic, thing=thing)
+    return HttpResponse(json.dumps({'success': True, 'body': topic.body}), content_type='application/json')
 
-
+@csrf_exempt
 def reply(request, thing_id, topic_id):
-    return HttpResponse('Replying to topic: %s about thing: %s' % (topic_id, thing_id))
+    if not request.POST:
+        return
+    author = request.POST.get('author')
+    body = request.POST.get('body')
+    topic = Topic.objects.get(pk=topic_id)
+    resp = Response.create(author=author, body=body, topic=topic)
+    return HttpResponse(json.dumps({'success': True, 'body': resp.body}), content_type='application/json')
